@@ -25,6 +25,7 @@
 | 指南 | 跨模块专题、选型 | `docs/guides/` |
 | 架构 | 分层、数据流、全局图 | `docs/architecture/` |
 | 模块 | 与代码模块一一对应 | `docs/modules/{category}/` |
+| 问题总库 | 问答归档主副本 | `docs/questions/` |
 | 历史 | 变更归档与整合 | `docs/history/` |
 
 ### 2.1 初始化判定
@@ -32,7 +33,7 @@
 **已初始化** 需同时满足：
 
 1. 存在 `docs/meta/doc-maintenance-state.json` 且 `"initialized": true`
-2. 存在 § 二 表中 **必需** 目录：`meta/`、`overview/`、`guides/`、`architecture/`、`modules/`、`history/`
+2. 存在 § 二 表中 **必需** 目录：`meta/`、`overview/`、`guides/`、`architecture/`、`questions/`、`modules/`、`history/`
 3. 存在 `docs/README.md`
 
 三者一致 → **跳过** 全量初始化，仅做增量维护。
@@ -123,20 +124,21 @@
 - 总览：`Q-YYYYMMDD-NNN`
 - 分模块：`Q-{category}-NNN`（category 来自 project-profile）
 
-### 6.3 问题记录模块（独立文件）
+### 6.3 问题记录（总库 + 模块副本）
 
-除双库摘要外，**完整问答**自动归档到各 category 下的 `questions/` 子目录（项目相关时，**无需询问**）：
+除双库摘要外，**完整问答**自动归档（项目相关时，**无需询问**）：
 
 | 项 | 默认约定 |
 |----|----------|
-| 路径 | `docs/modules/{category}/questions/` |
-| 文件名 | `{NN}-{主题}-{YYYYMMDD}.md` |
-| 连续合并 | **同日**且与锚点文件**主题连续** → 续写同一文件（`## 问答二`…），不递增 NN |
+| **主路径** | `docs/questions/{NN}-{主题}-{YYYYMMDD}.md` |
+| **模块路径** | 可映射 category 时，**同名文件**同步至 `docs/modules/{category}/questions/` |
+| 序号 NN | 在 **`docs/questions/`** 内递增；模块侧沿用总库 NN |
+| 连续合并 | **同日**且与锚点**主题连续** → 续写总库同一文件（`## 问答二`…），并同步模块副本 |
 | 必含 | 时间、问题、答复、关键代码（含源码路径） |
 | 模板 | `templates/question-record.template.md` |
-| 索引 | 各 `questions/README.md` 维护记录列表 |
+| 索引 | `docs/questions/README.md` + 各 category `questions/README.md` |
 
-与 § 6.1 问题库**同一轮次自动同步**。详见 `SKILL.md` § 六–§ 七。
+问题库摘要**链接优先指向总库**。详见 `SKILL.md` § 六–§ 七。
 
 ---
 
@@ -214,6 +216,7 @@ docs/history/
 | `templates/question-record-multi.template.md` | 同日连续问答（多节结构） |
 | `templates/question-record-continued-section.template.md` | 续写追加一节 |
 | `templates/category-questions-readme.template.md` | category 下 questions/ 索引 |
+| `templates/docs-questions-readme.template.md` | docs/questions/ 总库索引 |
 | `templates/history-minor.template.md` | 小更新历史 |
 | `templates/history-major.template.md` | 大范围变更历史 |
 | `templates/history-consolidated.template.md` | minor 整合记录 |

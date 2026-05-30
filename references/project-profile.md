@@ -37,6 +37,8 @@ docs/
 ├── overview/system-overview.md
 ├── guides/execution-modes.md
 ├── architecture/overview.md
+├── questions/                  # 问题记录总库（主副本）
+│   └── README.md
 └── modules/
     ├── ui/
     │   └── questions/          # 问题记录（独立问答归档）
@@ -53,8 +55,10 @@ docs/
 | 系统概览 | `docs/overview/system-overview.md` |
 | 架构总览 | `docs/architecture/overview.md` |
 | 模块文档 | `docs/modules/{category}/{module}.md` |
-| 问题记录 | `docs/modules/{category}/questions/{NN}-{主题}-{YYYYMMDD}.md` |
-| 问题记录索引 | `docs/modules/{category}/questions/README.md` |
+| 问题记录（总库） | `docs/questions/{NN}-{主题}-{YYYYMMDD}.md` |
+| 问题记录（模块副本） | `docs/modules/{category}/questions/{NN}-{主题}-{YYYYMMDD}.md`（与总库同名，可映射时同步） |
+| 问题总库索引 | `docs/questions/README.md` |
+| 问题记录索引（category） | `docs/modules/{category}/questions/README.md` |
 | 总览问题库 | `docs/meta/question-bank-overview.md` |
 | 分模块问题库 | `docs/meta/question-bank-modules.md` |
 | 初始化状态 | `docs/meta/doc-maintenance-state.json` |

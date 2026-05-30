@@ -2,8 +2,8 @@
 name: doc-maintenance
 description: |
   当前仓库 docs/ 文档库的编写、初始化、修订与历史归档。仅处理本项目内文档与源码模块说明，不处理 Skill 安装/编写、IDE 或项目外工具链。
-  触发：整理 docs、写/改模块说明、文档初始化、模块增删改后的文档同步、文档历史记录、问题库入库、问题记录自动归档（项目相关 Q&A；同日连续问答合并入同一文件）。
-version: "1.5.0"
+  触发：整理 docs、写/改模块说明、文档初始化、模块增删改后的文档同步、文档历史记录、问题库入库、问题记录自动归档（先写 docs/questions/ 总库，可映射模块时同步至 category/questions/；同日连续问答合并）。
+version: "1.6.0"
 author: HanRuo
 tags: [docs, markdown, maintenance, reusable]
 ---
@@ -50,6 +50,7 @@ docs/
 ├── overview/
 ├── guides/
 ├── architecture/
+├── questions/          # 问题记录总库（主副本）
 ├── modules/
 └── history/
 ```
@@ -90,6 +91,7 @@ docs/
 | `docs/meta/conventions.md` | 规范（可从 profile 展开） |
 | `docs/meta/doc-maintenance-state.json` | 初始化标记 |
 | `docs/meta/question-bank-*.md` | 空问题库骨架 |
+| `docs/questions/` | 问题记录总库 + `README.md`（模板：`docs-questions-readme.template.md`） |
 | `docs/overview/`、`guides/`、`architecture/` | 各放占位 README 或 profile 指定文件 |
 | `docs/modules/{category}/` | **每个 category 必须有 `README.md`**，说明该文件夹代表什么模块层/领域 |
 | `docs/modules/{category}/questions/` | 问题记录目录 + `README.md`（模板：`category-questions-readme.template.md`） |
@@ -198,13 +200,13 @@ docs/
 | **总览库** `question-bank-overview.md` | 跨多 category、产品流程、全局规范类 |
 | **两者** | 既跨模块又涉及具体实现细节 |
 
-模板：`question-overview.template.md` / `question-module.template.md`。摘要 1～3 句 + 链接到 § 七 的完整记录文件。**续写同一文件时更新原条目，不新增重复 Q 号。**
+模板：`question-overview.template.md` / `question-module.template.md`。摘要 1～3 句 + **链接优先指向 `docs/questions/` 总库**（§ 七）。续写同一文件时更新原条目，不新增重复 Q 号。
 
 ---
 
-## 七、问题记录模块（独立归档）
+## 七、问题记录（总库 + 模块同步）
 
-用户就**本项目**提问且已给出实质性答复时，**自动**将完整问答归档到对应 category 的 `questions/` 子目录，**无需询问用户**。
+用户就**本项目**提问且已给出实质性答复时，**自动**归档完整问答，**无需询问用户**。
 
 ### 7.0 自动归档判定
 
@@ -224,93 +226,100 @@ docs/
 | 与项目无关 | 通用 Java 语法、外部框架、非本仓库话题 |
 | 用户明确排除 | 「不要归档」「仅回答」「不用记录」 |
 | 无实质解答 | 仅确认、寒暄、无法回答的追问 |
-| 纯执行指令 | 「帮我改 X 文件」且未形成可复用的 Q&A 结论（改完代码即可，不必建档） |
+| 纯执行指令 | 「帮我改 X 文件」且未形成可复用的 Q&A 结论 |
 
-**category 判定**：按问题涉及的**主要源码模块**映射（见 profile `category 映射`）；跨类以主模块为准；无法判定时归入最相关的 category，**不中断归档**。
+**category 判定**：按问题涉及的**主要源码模块**映射（见 profile `category 映射`）；跨类以主模块为准；无法判定时仅写总库，**不中断归档**。
 
-### 7.1 目录与命名
+### 7.1 目录与命名（双层结构）
 
 ```text
-docs/modules/{category}/questions/
-├── README.md                      # 本分类问题记录索引
-├── 01-rag相关-20260529.md
-├── 02-cli补全-20260530.md
-└── ...
+docs/questions/                              ← 主副本（先写这里）
+├── README.md
+├── 01-react模式与循环-20260529.md
+└── 02-工具注册与使用-20260529.md
+
+docs/modules/{category}/questions/           ← 模块副本（可映射时同步）
+├── README.md
+└── 01-react模式与循环-20260529.md         ← 与总库同名
 ```
 
 | 项 | 规则 |
 |----|------|
-| **路径** | `docs/modules/{category}/questions/`（profile 的 category 之一） |
-| **文件名** | `{NN}-{主题}-{YYYYMMDD}.md`；**同日连续问答**续写同一文件，不新增序号 |
-| **序号 NN** | 仅**新建文件**时递增；续写时沿用当日最近文件的 NN |
-| **主题** | 简短中文，概括问题领域（如 `rag相关`、`agent执行流程`） |
-| **日期** | 答复落盘日 `YYYYMMDD`（如 `20260529`） |
-| **模板** | `templates/question-record.template.md` |
+| **主路径** | `docs/questions/{NN}-{主题}-{YYYYMMDD}.md` |
+| **模块路径** | 判定可映射 category 后，**同文件名**写入 `docs/modules/{category}/questions/` |
+| **序号 NN** | 在 **`docs/questions/`** 内递增；模块侧沿用总库 NN，不单独编号 |
+| **连续合并** | **同日**且主题连续 → 续写总库同一文件（`## 问答二`…），并**同步更新**模块副本 |
+| **主题** | 简短中文（如 `react模式与循环`、`工具同步调用`） |
+| **日期** | 答复落盘日 `YYYYMMDD` |
+| **模板** | 新建：`question-record.template.md` / `question-record-multi.template.md`；续写：`question-record-continued-section.template.md` |
 
-| **模板** | 新建：`question-record.template.md` 或 `question-record-multi.template.md`；续写：`question-record-continued-section.template.md` |
-
-**category 判定**：见 § 7.0。
+**链接修正**：总库内链指向 `../modules/`、`../guides/`、`../meta/`；模块副本内链指向 `../{module}.md`、`../../../questions/`（总库）、`../../../meta/`。
 
 ### 7.2 单条 / 合并记录结构
 
-**新建单条**（首问或非连续）：元数据表 + `## 一、问题` / `## 二、答复` / `## 三、关键代码`（见 `question-record.template.md`）。
+**新建单条**：元数据表 + `## 一、问题` / `## 二、答复` / `## 三、关键代码`（见 `question-record.template.md`）。
 
-**合并多篇**（同日连续）：文档顶栏 `问答条数`；正文用 `## 问答一`、`## 问答二`…，每节含 `### 问题` / `### 答复` / `### 关键代码`（见 `question-record-multi.template.md`）。
+**合并多篇**（同日连续）：顶栏 `问答条数`；正文 `## 问答一`、`## 问答二`…（见 `question-record-multi.template.md`）。
 
-**续写已有合并文档**：在文末追加 `## 问答{N}` 节（`question-record-continued-section.template.md`），更新顶栏 `问答条数`。
+**续写**：文末追加 `## 问答{N}`（`question-record-continued-section.template.md`），更新顶栏 `问答条数`。
+
+元数据表建议含：`总库正文` / `模块副本` 互链（落盘时按所在目录填相对路径）。
 
 ### 7.3 连续问答判定（归档前必查）
 
-落盘前读取 `docs/modules/{category}/questions/`，取**当日**（`YYYYMMDD` = 今天）**序号最大**的 `NN-主题-YYYYMMDD.md` 作为候选锚点文件。
+落盘前读取 **`docs/questions/`**，取**当日**（`YYYYMMDD` = 今天）**序号最大**的 `NN-主题-YYYYMMDD.md` 作为候选锚点文件（**不再**仅扫描 module 目录）。
 
 **续写同一文件**（须**同时满足**）：
 
 | # | 条件 |
 |---|------|
-| 1 | 存在锚点文件，且文件名日期 = **今天** |
-| 2 | 锚点与当前问题 **同一 category** |
-| 3 | **主题连续**：同一模块/同一概念（如均为 ReAct、均为 `Agent` 循环）；非明显换题 |
-| 4 | **方向未偏离**：当前问是对上一问的延伸、澄清或深入（含指代上一轮的「也就是说」「继续」「刚才」等）；非跳到无关模块 |
+| 1 | 总库存在锚点文件，且文件名日期 = **今天** |
+| 2 | 锚点与当前问题 **同一 category**（若可判定） |
+| 3 | **主题连续**：同一模块/同一概念 |
+| 4 | **方向未偏离**：延伸、澄清或深入；非跳到无关模块 |
 
-**新建文件**（任一满足即新建，分配下一 `NN`）：
+**新建文件**（任一满足即新建，在总库分配下一 `NN`）：
 
 - 当日无锚点文件
-- 换 category、换核心主题（如 ReAct → RAG）
+- 换 category、换核心主题
 - 与上一问无明显承接关系
-
-主题短语：续写时可不改文件名；新建时取能涵盖连续问答的**略宽主题**（如 `react模式与循环`）。
 
 ### 7.4 工作流（每次解答后）
 
 1. **先完成解答**（检索源码、给出准确答复）。
 2. **判定** § 7.0 是否应归档 → **否**则结束。
-3. **判定** § 7.3 续写锚点文件 or 新建。
-4. **自动落盘** + **同步** § 六（续写时**更新**原有问题库条目摘要，不重复新建 Q 号）。
-5. **告知用户**路径；续写时注明「已续写至 …（问答 N）」。
+3. **判定** § 7.3 续写总库锚点 or 新建。
+4. **自动落盘总库** → **判定 category** → 可映射则**同步模块副本**（同内容、修正链接）。
+5. **同步** § 六（续写时**更新**原有问题库条目，不重复新建 Q 号）。
+6. **更新** `docs/questions/README.md`；若写入模块副本，更新对应 `modules/{category}/questions/README.md`。
+7. **告知用户**路径；续写时注明「已续写至 …（问答 N）」。
 
 ### 7.5 落盘步骤
 
 **路径 A — 续写当日锚点文件**
 
-1. 读取锚点文件全文，在文末追加 `## 问答{N}` 节（模板 `question-record-continued-section.template.md`）。
-2. 更新文档顶栏 `问答条数`（+1）。
-3. **不**新增 `NN` 文件名；**不**在 `README.md` 新增行，仅更新该行「问题摘要」（合并简述多条）。
-4. 更新 § 六 中指向该文件的条目（合并问题与结论，一条摘要链到同一文件）。
+1. 读取总库锚点全文，文末追加 `## 问答{N}` 节。
+2. 更新顶栏 `问答条数`（+1）。
+3. **同步**同文件至已存在的模块副本（若 category 可映射且副本已存在）。
+4. 更新总库与模块 `README.md` 该行摘要；§ 六 更新条目。
 
 **路径 B — 新建文件**
 
-1. 确认 `questions/` 与 `README.md` 存在。
-2. 扫描目录取下一 `NN`；生成 `{NN}-{主题}-{YYYYMMDD}.md`。
-3. 若预判本会话可能连续多轮，首条可用 `question-record-multi.template.md`（`## 问答一` 结构）。
-4. `README.md` 追加一行；§ 六 新增一条摘要 + 链接。
+1. 确认 `docs/questions/` 与 `README.md` 存在（缺失则创建）。
+2. 扫描 **`docs/questions/`** 取下一 `NN`；生成 `{NN}-{主题}-{YYYYMMDD}.md`。
+3. 写入总库；**判定 category**：
+   - 可映射 → 写入 `docs/modules/{category}/questions/` **同名文件**（修正内链）；更新模块 `questions/README.md`。
+   - 不可映射 → 仅总库；元数据 `模块副本` 留空或注明「无」。
+4. 总库 `README.md` 追加一行；§ 六 新增摘要 + **链接指向总库路径**。
 
 ### 7.6 与模块文档、问题库的分工
 
 | 载体 | 何时用 |
 |------|--------|
 | `modules/{category}/{module}.md` | 正式规格、行为说明（非单次问答） |
-| `modules/{category}/questions/*.md` | 问答归档；**同日连续**合并为一文件多节 |
-| `meta/question-bank-*.md` | 跨会话快速检索的短摘要 |
+| `docs/questions/*.md` | 问答归档**主副本**；同日连续合并为一文件多节 |
+| `modules/{category}/questions/*.md` | 可映射 category 时的**模块侧副本**（与总库同名同步） |
+| `meta/question-bank-*.md` | 跨会话快速检索的短摘要；**链接优先指向总库** |
 
 ---
 

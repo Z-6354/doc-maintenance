@@ -4,7 +4,7 @@
 
 **仓库**：<https://github.com/Z-6354/doc-maintenance>
 
-[![Skill Version](https://img.shields.io/badge/skill-v1.5.0-blue)](SKILL.md)
+[![Skill Version](https://img.shields.io/badge/skill-v1.6.0-blue)](SKILL.md)
 ---
 
 ## 简介
@@ -20,7 +20,7 @@
 | **文档库初始化** | 扫描源码模块，生成 `docs/` 分层目录与模块 doc 骨架 |
 | **规范写作** | 统一标题层级、文件命名、模块元数据与内链约定 |
 | **模块文档同步** | 源码增删改时，更新对应 `docs/modules/{category}/` |
-| **问题自动归档** | 项目相关 Q&A 写入 `questions/` 独立文件 + 问题库摘要 |
+| **问题自动归档** | 项目相关 Q&A 先写入 `docs/questions/` 总库，可映射模块时同步至 `modules/{category}/questions/` |
 | **连续问答合并** | 同日、主题连贯的多轮追问合并为同一文档（`## 问答一/二`） |
 | **变更历史** | minor / major / consolidated 三级归档，大范围改动须用户确认 |
 
@@ -46,11 +46,12 @@ docs/
 ├── overview/                 # 系统概览
 ├── guides/                   # 跨模块指南
 ├── architecture/             # 架构设计
+├── questions/                # 问答归档总库（主副本，NN-主题-YYYYMMDD.md）
 ├── modules/
 │   ├── {category}/           # 按项目自定义，如 frontend / backend / core
 │   │   ├── README.md
 │   │   ├── {module}.md
-│   │   └── questions/        # 问答归档（NN-主题-YYYYMMDD.md）
+│   │   └── questions/        # 可映射 category 时的模块副本（与总库同名）
 │   └── ...
 └── history/                  # 文档变更历史
 ```
@@ -139,8 +140,9 @@ doc-maintenance/
 ```text
 解答项目相关问题
   → 判定是否归档（源码/架构/配置/用法等 → 是；无关话题 → 否）
-  → 检查当日是否有连续问答 → 续写或新建 questions/*.md
-  → 同步 question-bank 摘要
+  → 先写 docs/questions/ 总库；检查当日连续问答 → 续写或新建
+  → 可映射 category → 同步 modules/{category}/questions/ 同名文件
+  → 同步 question-bank 摘要（链接优先指向总库）
   → 告知用户归档路径
 ```
 
