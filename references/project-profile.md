@@ -151,7 +151,7 @@ docs/
 ## 九、项目特有约定
 
 - 历史 phase 文档：`paicli-main/paicli-main/docs/`，**不要**与 `docs/` 混写。
-- Skill 加载顺序：JAR 内置 → `~/.hancli/skills/` → **本项目** `.hancli/skills/`（同名覆盖）。
+- Skill 加载：Cursor 项目 Skill 位于 **`.cursor/skills/`**（如 `doc-maintenance`）；HANCLI CLI 另扫 `~/.hancli/skills/` 与 `.hancli/skills/`（不读 `.cursor/skills/`）。
 - 语言/runtime：Java 21，入口 `com.hancli.cli.Main`。
 
 ---

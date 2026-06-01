@@ -36,4 +36,4 @@ docs/questions/01-xxx.md          ← 主归档（先写这里）
 
 新增记录后，在本表追加一行，按序号排序。
 
-维护规则见 [conventions.md § 9.1](../meta/conventions.md#91-问题记录总库--模块副本) 与 `.hancli/skills/doc-maintenance/SKILL.md` § 七。
+维护规则见 [conventions.md § 9.1](../meta/conventions.md#91-问题记录总库--模块副本) 与 `.cursor/skills/doc-maintenance/SKILL.md` § 七。

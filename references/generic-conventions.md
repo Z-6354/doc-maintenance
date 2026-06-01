@@ -157,9 +157,9 @@
 
 ## 八、复制到新项目
 
-1. 复制整个 `doc-maintenance/` 目录到：
-   - 目标项目：`.hancli/skills/doc-maintenance/`，或
-   - 用户全局：`~/.hancli/skills/doc-maintenance/`
+1. 克隆或复制整个 `doc-maintenance/` 目录到：
+   - 目标项目：`.cursor/skills/doc-maintenance/`（推荐），或
+   - 用户全局：`~/.cursor/skills/doc-maintenance/`
 2. 编辑 `references/project-profile.md`（必填）
 3. 在目标项目创建 `docs/meta/conventions.md`（可选，人类可读规范）
 4. 执行 `/skill reload`

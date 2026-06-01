@@ -66,7 +66,7 @@ docs/
 
 ```bash
 cd your-project
-git clone https://github.com/Z-6354/doc-maintenance.git .skills/doc-maintenance
+git clone https://github.com/Z-6354/doc-maintenance.git .cursor/skills/doc-maintenance
 ```
 
 实际路径取决于你的 Skill 加载约定，常见位置：
@@ -164,10 +164,11 @@ doc-maintenance/
 
 ## 版本
 
-当前 Skill 版本：**v1.8.0**（见 `SKILL.md` frontmatter）
+当前 Skill 版本：**v1.9.0**（见 `SKILL.md` frontmatter）
 
 | 版本 | 要点 |
 |------|------|
+| v1.9.0 | **`references/every-turn-protocol.md`** 每回合必读；先 Write 再回复 |
 | v1.8.0 | **§ 0.0 Skill 加载即默认归档**；用户无需说「归档」；Rule/检查清单同步强化 |
 | v1.7.0 | § 零 回合结束强制门；`agent-completion-gate.md`；`.cursor/rules/doc-maintenance-qna-archive.mdc` |
 | v1.6.0 | 新增 `docs/questions/` 总库；可映射 module 时同步 category/questions/ |
