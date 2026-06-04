@@ -11,7 +11,6 @@
 
 - `doc-maintenance` 在 Agent **available_skills** 列表
 - 用户 `@doc-maintenance` 或本会话已读 `SKILL.md` / 本文件
-- `.cursor/rules/doc-maintenance-qna-archive.mdc` 已 `alwaysApply`（本仓库默认 true）
 
 **禁止**因用户未出现「归档 / docs/questions / doc-maintenance」而跳过。
 

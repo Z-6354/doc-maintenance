@@ -8,7 +8,7 @@
 
 ## 1. Skill 是否已生效（§ 0.0）
 
-- [ ] `doc-maintenance` 在 available_skills，或已读协议 / 本 Rule，或 `doc-maintenance-qna-archive.mdc` 已 `alwaysApply`
+- [ ] `doc-maintenance` 在 available_skills，或已读 `every-turn-protocol.md` / SKILL 文首「首读」
 
 **是** → 下节起默认**须归档**；用户**无需**说「归档」「写 docs」。  
 **否** → 仅当用户明确触发 doc-maintenance 时再归档（本仓库通常始终为「是」）。

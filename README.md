@@ -4,7 +4,7 @@
 
 **仓库**：<https://github.com/Z-6354/doc-maintenance>
 
-[![Skill Version](https://img.shields.io/badge/skill-v1.9.0-blue)](SKILL.md)
+[![Skill Version](https://img.shields.io/badge/skill-v1.10.0-blue)](SKILL.md)
 ---
 
 ## 简介
@@ -86,8 +86,9 @@ git clone https://github.com/Z-6354/doc-maintenance.git ~/.cursor/skills/doc-mai
 
 1. 编辑 **`references/project-profile.md`**：项目名、文档根目录、模块发现路径、category 映射
 2. （可选）在目标项目创建 `docs/meta/conventions.md` 作为人类可读规范
-3. **复制** `.cursor/rules/doc-maintenance-qna-archive.mdc` 到目标项目（与 Skill 同仓库分发；`alwaysApply: true`，弥补 Cursor 不自动写盘）
-4. 重新加载 Skill（如 `/skill reload` 或重启 Agent 会话）
+3. 重新加载 Skill（如 `/skill reload` 或重启 Agent 会话）
+
+**无需**单独安装 `.cursor/rules/`（v1.10.0 起强制归档逻辑已全部在 Skill 内）。
 
 ### 首次运行
 
@@ -164,13 +165,14 @@ doc-maintenance/
 
 ## 版本
 
-当前 Skill 版本：**v1.9.0**（见 `SKILL.md` frontmatter）
+当前 Skill 版本：**v1.10.0**（见 `SKILL.md` frontmatter）
 
 | 版本 | 要点 |
 |------|------|
+| v1.10.0 | **移除独立 Rule**；`doc-maintenance-qna-archive` 内容并入 Skill 文首；仅安装 Skill 即可 |
 | v1.9.0 | **`references/every-turn-protocol.md`** 每回合必读；先 Write 再回复 |
-| v1.8.0 | **§ 0.0 Skill 加载即默认归档**；用户无需说「归档」；Rule/检查清单同步强化 |
-| v1.7.0 | § 零 回合结束强制门；`agent-completion-gate.md`；`.cursor/rules/doc-maintenance-qna-archive.mdc` |
+| v1.8.0 | **§ 0.0 Skill 加载即默认归档**；用户无需说「归档」；检查清单同步强化 |
+| v1.7.0 | § 零 回合结束强制门；`agent-completion-gate.md` |
 | v1.6.0 | 新增 `docs/questions/` 总库；可映射 module 时同步 category/questions/ |
 | v1.5.0 | 同日连续问答合并归档 |
 | v1.4.0 | 项目相关 Q&A 自动写入，无需询问 |
