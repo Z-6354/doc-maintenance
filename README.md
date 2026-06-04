@@ -4,12 +4,12 @@
 
 **仓库**：<https://github.com/Z-6354/doc-maintenance>
 
-[![Skill Version](https://img.shields.io/badge/skill-v1.10.0-blue)](SKILL.md)
+[![Skill Version](https://img.shields.io/badge/skill-v1.11.0-blue)](SKILL.md)
 ---
 
 ## 简介
 
-**doc-maintenance** 是一套与具体业务无关的文档维护流程，可安装到任意支持 Agent Skill 的项目（如 Cursor、Codex 等兼容 `SKILL.md` 的工具链）。
+**doc-maintenance** 是一套与具体业务无关的文档维护流程，可安装到任意支持 `SKILL.md` 的 Agent 运行时（**Cursor、Claude Code、Codex、Hermes** 等）。
 
 它针对常见问题：文档分散、命名不统一、模块说明与源码脱节、团队问答无法沉淀。Skill 将维护流程**结构化、可重复、可交给 Agent 执行**。
 
@@ -29,7 +29,7 @@
 ## 适用场景
 
 - 多模块源码项目（Java、TypeScript、Go、Python 等）
-- 使用 **Cursor Agent** 或其他支持 Skill 的 AI 编程助手
+- 使用 **任意支持 Skill 的 AI 编程 Agent**（见 [Agent 兼容表](references/agent-runtime.md)）
 - 希望 `docs/` 与代码结构对应、可持续维护
 - 希望「问过的问题」形成可检索的知识库
 
@@ -64,19 +64,22 @@ docs/
 
 ### 项目级（推荐）
 
+将 `{SKILLS_DIR}` 替换为你的 Agent 对应目录（完整表见 [`references/agent-runtime.md`](references/agent-runtime.md)）：
+
 ```bash
 cd your-project
-git clone https://github.com/Z-6354/doc-maintenance.git .cursor/skills/doc-maintenance
+git clone https://github.com/Z-6354/doc-maintenance.git {SKILLS_DIR}/doc-maintenance
 ```
 
-实际路径取决于你的 Skill 加载约定，常见位置：
+| Agent | `{SKILLS_DIR}` 示例 |
+|-------|---------------------|
+| Cursor | `.cursor/skills` |
+| Claude Code | `.claude/skills` |
+| Codex | `.codex/skills` |
+| Hermes / 通用 | `.skills` |
+| HANCLI CLI | `.hancli/skills` |
 
-| 工具 / 约定 | 典型路径 |
-|-------------|----------|
-| 项目级 Skill | `.cursor/skills/doc-maintenance/`、`.skills/doc-maintenance/` |
-| 用户级 Skill | `~/.cursor/skills/doc-maintenance/` 等 |
-
-也可直接克隆到上表路径，例如：
+用户级安装示例：
 
 ```bash
 git clone https://github.com/Z-6354/doc-maintenance.git ~/.cursor/skills/doc-maintenance
@@ -86,9 +89,7 @@ git clone https://github.com/Z-6354/doc-maintenance.git ~/.cursor/skills/doc-mai
 
 1. 编辑 **`references/project-profile.md`**：项目名、文档根目录、模块发现路径、category 映射
 2. （可选）在目标项目创建 `docs/meta/conventions.md` 作为人类可读规范
-3. 重新加载 Skill（如 `/skill reload` 或重启 Agent 会话）
-
-**无需**单独安装 `.cursor/rules/`（v1.10.0 起强制归档逻辑已全部在 Skill 内）。
+3. 重载 Skill 或重启 Agent 会话（Cursor：`/skill reload`；其它 Agent 依宿主文档）
 
 ### 首次运行
 
@@ -109,6 +110,9 @@ doc-maintenance/
 ├── SKILL.md                          # Agent 主指令
 ├── README.md                         # 本文件
 ├── references/
+│   ├── agent-runtime.md              # 多 Agent 安装与兼容（v1.11.0+）
+│   ├── every-turn-protocol.md        # 每回合必读协议（≤60 行）
+│   ├── agent-completion-gate.md      # 回合结束检查清单
 │   ├── generic-conventions.md        # 通用规则（一般不改）
 │   ├── project-profile.md            # 项目差异配置（安装后必改）
 │   └── conventions-summary.md        # 规范速查
@@ -122,6 +126,7 @@ doc-maintenance/
 | 文件 | 职责 |
 |------|------|
 | `SKILL.md` | 前置检查、初始化、归档、禁止事项 |
+| `agent-runtime.md` | Cursor / Claude Code / Hermes 等路径与生效信号 |
 | `project-profile.md` | **按目标项目改动的唯一入口** |
 | `generic-conventions.md` | 跨项目复用的文档框架 |
 
@@ -140,8 +145,8 @@ doc-maintenance/
 ### 问答沉淀（自动）
 
 ```text
-解答项目相关问题（同一回合内落盘，Cursor 不代写）
-  → § 零 + agent-completion-gate.md
+解答项目相关问题（同一回合内落盘，Agent 运行时不会代写）
+  → § 零 + every-turn-protocol.md + agent-completion-gate.md
   → 判定是否归档（源码/架构/配置/用法等 → 是；无关话题 → 否）
   → 先写 docs/questions/ 总库；检查当日连续问答 → 续写或新建
   → 可映射 category → 同步 modules/{category}/questions/ 同名文件
@@ -155,9 +160,9 @@ doc-maintenance/
 
 ## 复制到新项目 checklist
 
-- [ ] 克隆或复制本仓库到项目的 Skill 目录
+- [ ] 克隆或复制本仓库到 Agent 的 Skill 目录（见 `agent-runtime.md`）
 - [ ] 重写 `references/project-profile.md`（模块发现、category、废弃路径）
-- [ ] 重新加载 Skill
+- [ ] 重载 Skill
 - [ ] 首次对话触发初始化（或手动对齐已有 `docs/`）
 - [ ] 确认 `docs/meta/doc-maintenance-state.json` 中 `initialized: true`
 
@@ -165,13 +170,14 @@ doc-maintenance/
 
 ## 版本
 
-当前 Skill 版本：**v1.10.0**（见 `SKILL.md` frontmatter）
+当前 Skill 版本：**v1.11.0**（见 `SKILL.md` frontmatter）
 
 | 版本 | 要点 |
 |------|------|
-| v1.10.0 | **移除独立 Rule**；`doc-maintenance-qna-archive` 内容并入 Skill 文首；仅安装 Skill 即可 |
-| v1.9.0 | **`references/every-turn-protocol.md`** 每回合必读；先 Write 再回复 |
-| v1.8.0 | **§ 0.0 Skill 加载即默认归档**；用户无需说「归档」；检查清单同步强化 |
+| v1.11.0 | **多 Agent 兼容**；`agent-runtime.md`；去 Cursor 专用表述 |
+| v1.10.0 | **移除独立 Rule**；归档逻辑并入 Skill 文首 |
+| v1.9.0 | **`every-turn-protocol.md`** 每回合必读；先 Write 再回复 |
+| v1.8.0 | **§ 0.0 Skill 加载即默认归档**；用户无需说「归档」 |
 | v1.7.0 | § 零 回合结束强制门；`agent-completion-gate.md` |
 | v1.6.0 | 新增 `docs/questions/` 总库；可映射 module 时同步 category/questions/ |
 | v1.5.0 | 同日连续问答合并归档 |

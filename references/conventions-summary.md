@@ -6,7 +6,7 @@
 ## 触发范围
 
 **仅本项目 docs**；不处理 Skill 安装到其它仓库、用户级 Skill 管理。  
-**§ 0.0**：Skill 加载后，用户对 HANCLI 的普通技术问**默认归档**，无需用户说「归档」。
+**§ 0.0**：Skill 加载后，用户对本项目的普通技术问**默认归档**，无需用户说「归档」。
 
 ## 启动检查
 
@@ -26,5 +26,5 @@
 
 ## 问题记录
 
-**§ 零**：Cursor 不代写；Agent **同一回合**须写 `docs/questions/`（见 `agent-completion-gate.md`、`.cursor/rules/doc-maintenance-qna-archive.mdc`）。  
+**§ 零**：Agent 运行时不会代写；Agent **同一回合**须写 `docs/questions/`（见 `agent-completion-gate.md`、`every-turn-protocol.md`）。
 完整问答先写总库 `docs/questions/{NN}-…`，可映射时同步 `docs/modules/{category}/questions/` 同名文件。**同日连续**、主题未偏离的问答续写同一文件。回复末 `📁 已归档：…`。用户说「不要归档」或与项目无关时跳过。
